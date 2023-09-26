@@ -10,11 +10,11 @@
 //You probably shouldn't be looking here to learn to use either library.
 
 int main(int argc, char **argv) {
-	FT_Library library;
-	FT_Init_FreeType( &library );
-
-	hb_buffer_t *buf = hb_buffer_create();
-	hb_buffer_destroy(buf);
-
-	std::cout << "It worked?" << std::endl;
+    FT_Library library;
+    FT_Init_FreeType(&library);
+    
+    hb_buffer_t *buf = hb_buffer_create();
+    hb_buffer_destroy(buf);
+    
+    std::cout << "It worked?" << std::endl;
 }
