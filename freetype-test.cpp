@@ -13,7 +13,7 @@
 #include "read_write_chunk.hpp"
 
 // TODO: put constants in a common file
-constexpr size_t PIXEL_COUNT = 72;
+constexpr size_t PIXEL_COUNT = 36;
 constexpr float PIXEL_SCALE = 0.1;
 
 int main(int argc, char **argv) {
@@ -154,6 +154,8 @@ int main(int argc, char **argv) {
         
         index.push_back({name_begin, name_end, vertex_begin, vertex_end});
     }
+    
+    std::cout << "Number of vertices is " << data.size() << "\n";
     
     std::ofstream out(data_path("dist/Inknut_Antiqua.pnct"), std::ios::binary);
     write_chunk("pnct", data, &out);
