@@ -11,7 +11,7 @@
 
 // TODO: put constants in a common file
 constexpr size_t PIXEL_COUNT = 72;
-constexpr float PIXEL_SCALE = 0.1;
+constexpr float PIXEL_SCALE = 0.1f;
 
 int main(int argc, char **argv) {
     FT_Library ft_library;
@@ -102,11 +102,11 @@ int main(int argc, char **argv) {
             std::string name(buf);
             // std::cout << "Found name \"" << name << "\" for index_entry " << glyph_index << "\n";
             
-            index_entry.name_begin = strings.size();
-            tex_index_entry.name_begin = strings.size();
+            index_entry.name_begin = (uint32_t) strings.size();
+            tex_index_entry.name_begin = (uint32_t) strings.size();
             strings.insert(strings.end(), name.begin(), name.end());
-            index_entry.name_end = strings.size();
-            tex_index_entry.name_end = strings.size();
+            index_entry.name_end = (uint32_t) strings.size();
+            tex_index_entry.name_end = (uint32_t) strings.size();
         }
         
         /*
@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
         }
         
         { // Make the rectangle
-            index_entry.vertex_begin = vertices.size();
+            index_entry.vertex_begin = (uint32_t) vertices.size();
             // all of these are in pixels
             FT_Int top = face->glyph->bitmap_top;
             FT_Int left = face->glyph->bitmap_left;
@@ -159,7 +159,7 @@ int main(int argc, char **argv) {
                                             (float) bottom * PIXEL_SCALE,
                                             0),
                                   glm::vec2(0.0, 1.0));
-            index_entry.vertex_end = vertices.size();
+            index_entry.vertex_end = (uint32_t) vertices.size();
         }
         
         { // Fill the texture
@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
             tex_index_entry.height = bitmap.rows;
             tex_index_entry.width = bitmap.width;
             
-            tex_index_entry.tex_begin = texture_colors.size();
+            tex_index_entry.tex_begin = (uint32_t) texture_colors.size();
             unsigned int r = 0;
             // filled in row by row, top-down
             for (uint8_t *row = bitmap.buffer; r < bitmap.rows; row = &row[bitmap.pitch], r++) {
@@ -177,7 +177,7 @@ int main(int argc, char **argv) {
                 }
             }
             
-            tex_index_entry.tex_end = texture_colors.size();
+            tex_index_entry.tex_end = (uint32_t) texture_colors.size();
         }
         
         texture_indices.push_back(tex_index_entry);
