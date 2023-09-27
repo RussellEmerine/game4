@@ -409,7 +409,7 @@ void mix_audio(void *, Uint8 *buffer_, int len) {
             
             //update position in sample:
             playing_sample.i += 1;
-            if (!std::isnan(playing_sample.i)) {
+            if (playing_sample.i == playing_sample.data.size()) {
                 if (playing_sample.loop) {
                     playing_sample.i = 0;
                 } else {
