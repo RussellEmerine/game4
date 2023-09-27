@@ -166,7 +166,7 @@ const show_scene_names = [
 ];
 
 const freetype_test_names = [
-    maek.CPP('freetype-test.cpp')
+    maek.CPP('freetype-test.cpp'),
 ];
 
 //the '[exeFile =] LINK(objFiles, exeFileBase, [, options])' links an array of objects into an executable:
@@ -177,7 +177,7 @@ const game_exe = maek.LINK([...game_names, ...common_names], 'dist/game');
 const show_meshes_exe = maek.LINK([...show_meshes_names, ...common_names], 'scenes/show-meshes');
 const show_scene_exe = maek.LINK([...show_scene_names, ...common_names], 'scenes/show-scene');
 
-const freetype_test_exe = maek.LINK([...freetype_test_names], 'freetype-test');
+const freetype_test_exe = maek.LINK([...freetype_test_names, ...common_names], 'freetype-test');
 
 //set the default target to the game (and copy the readme files):
 maek.TARGETS = [game_exe, show_meshes_exe, show_scene_exe, freetype_test_exe, ...copies];

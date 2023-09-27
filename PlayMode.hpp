@@ -8,6 +8,12 @@
 #include <vector>
 #include <deque>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+#include <hb.h>
+#include <hb-ft.h>
+
 struct PlayMode : Mode {
     PlayMode();
     
@@ -47,5 +53,4 @@ struct PlayMode : Mode {
     
     //camera:
     Scene::Camera *camera = nullptr;
-    
 };

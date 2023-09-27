@@ -10,7 +10,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include <random>
+#include <iostream>
 
 GLuint hexapod_meshes_for_lit_color_texture_program = 0;
 Load<MeshBuffer> hexapod_meshes(LoadTagDefault, []() -> MeshBuffer const * {
@@ -65,10 +65,56 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
     //start music loop playing:
     // (note: position will be over-ridden in update())
     leg_tip_loop = Sound::loop_3D(*dusty_floor_sample, 1.0f, get_leg_tip_position(), 10.0f);
+    
+    // We only need to create the data once for now, so it's fine to just have them here in the constructor
+    // TODO: offload these into dedicated drawing structures
+    FT_Library ft_library;
+    FT_Face ft_face;
+    
+    if (FT_Init_FreeType(&ft_library)) {
+        std::cerr << "Problem initializing FreeType\n";
+        abort();
+    };
+    // TODO: copy fonts into dist
+    if (FT_New_Face(ft_library,
+                    data_path("../fonts/InknutAntiqua-Regular.ttf").c_str(),
+                    0, &ft_face)) {
+        std::cerr << "Problem initializing font\n";
+        abort();
+    }
+    // TODO: fix magic numbers
+    if (FT_Set_Char_Size(ft_face, 36 * 64, 0, 0, 0)) {
+        std::cerr << "Problem setting character size\n";
+        abort();
+    }
+    
+    hb_font_t *hb_font;
+    hb_font = hb_ft_font_create_referenced(ft_face);
+    
+    hb_buffer_t *hb_buffer;
+    hb_buffer = hb_buffer_create();
+    std::string english_text("Hello world!");
+//    std::string chinese_text("你好时节！");
+    hb_buffer_add_utf8(hb_buffer, english_text.c_str(), -1, 0, -1);
+    hb_buffer_set_direction(hb_buffer, HB_DIRECTION_LTR);
+    hb_buffer_set_script(hb_buffer, HB_SCRIPT_LATIN);
+    hb_buffer_set_language(hb_buffer, hb_language_from_string("en", -1));
+    
+    hb_shape(hb_font, hb_buffer, nullptr, 0);
+    
+    // TODO: add stuff from the generated font pnct
+    scene.transforms.emplace_back();
+    scene.transforms.back().position = glm::vec3(0.0, 0.0, 20.0);
+    scene.drawables.emplace_back(&scene.transforms.back());
+    Scene::Drawable &drawable = scene.drawables.back();
+    
+    drawable.pipeline = lit_color_texture_program_pipeline;
+    
+    drawable.pipeline.vao = hexapod_meshes_for_lit_color_texture_program;
+    assert(false && "INCOMPLETE");
 }
 
-PlayMode::~PlayMode() {
-}
+PlayMode::~PlayMode() = default;
 
 bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size) {
     
