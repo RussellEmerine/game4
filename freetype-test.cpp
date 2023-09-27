@@ -135,28 +135,28 @@ int main(int argc, char **argv) {
             // It's a little weird that I'm going top then bottom but it helps with the pixel loop later
             
             // draw the first triangle
-            vertices.emplace_back(glm::vec3((float) left / PIXEL_SCALE,
-                                            (float) top / PIXEL_SCALE,
+            vertices.emplace_back(glm::vec3((float) left * PIXEL_SCALE,
+                                            (float) top * PIXEL_SCALE,
                                             0),
                                   glm::vec2(0.0, 0.0));
-            vertices.emplace_back(glm::vec3((float) right / PIXEL_SCALE,
-                                            (float) top / PIXEL_SCALE,
+            vertices.emplace_back(glm::vec3((float) right * PIXEL_SCALE,
+                                            (float) top * PIXEL_SCALE,
                                             0),
                                   glm::vec2(1.0, 0.0));
-            vertices.emplace_back(glm::vec3((float) right / PIXEL_SCALE,
-                                            (float) bottom / PIXEL_SCALE,
+            vertices.emplace_back(glm::vec3((float) right * PIXEL_SCALE,
+                                            (float) bottom * PIXEL_SCALE,
                                             0),
                                   glm::vec2(1.0, 1.0));
-            vertices.emplace_back(glm::vec3((float) left / PIXEL_SCALE,
-                                            (float) top / PIXEL_SCALE,
+            vertices.emplace_back(glm::vec3((float) left * PIXEL_SCALE,
+                                            (float) top * PIXEL_SCALE,
                                             0),
                                   glm::vec2(0.0, 0.0));
-            vertices.emplace_back(glm::vec3((float) right / PIXEL_SCALE,
-                                            (float) bottom / PIXEL_SCALE,
+            vertices.emplace_back(glm::vec3((float) right * PIXEL_SCALE,
+                                            (float) bottom * PIXEL_SCALE,
                                             0),
                                   glm::vec2(1.0, 1.0));
-            vertices.emplace_back(glm::vec3((float) left / PIXEL_SCALE,
-                                            (float) bottom / PIXEL_SCALE,
+            vertices.emplace_back(glm::vec3((float) left * PIXEL_SCALE,
+                                            (float) bottom * PIXEL_SCALE,
                                             0),
                                   glm::vec2(0.0, 1.0));
             index_entry.vertex_end = vertices.size();
@@ -168,10 +168,10 @@ int main(int argc, char **argv) {
             tex_index_entry.width = bitmap.width;
             
             tex_index_entry.tex_begin = texture_colors.size();
-            int r = 0;
+            unsigned int r = 0;
             // filled in row by row, top-down
             for (uint8_t *row = bitmap.buffer; r < bitmap.rows; row = &row[bitmap.pitch], r++) {
-                int c = 0;
+                unsigned int c = 0;
                 for (uint8_t *col = row; c < bitmap.width; col++, c++) {
                     texture_colors.push_back(*col);
                 }
