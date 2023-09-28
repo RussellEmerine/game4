@@ -69,8 +69,6 @@ char voice(char c) {
         default:
             return c;
     }
-    // makes less clever compilers happy
-    return c;
 }
 
 std::string umlaut_and_voice(const std::string &s) {

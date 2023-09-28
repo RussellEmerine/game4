@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
     
     //create window:
     SDL_Window *window = SDL_CreateWindow(
-            "gp23 game4: choice-based game", //TODO: remember to set a title for your game!
+            "A Simple Language Puzzle", //TODO: remember to set a title for your game!
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             1280, 720, //TODO: modify window size if you'd like
             SDL_WINDOW_OPENGL
