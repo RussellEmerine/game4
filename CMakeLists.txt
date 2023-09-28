@@ -71,4 +71,6 @@ add_executable(
         show-meshes.cpp
         show-scene.cpp
         main.cpp
+        get_font_textures.cpp
+        get_font_textures.hpp
 )

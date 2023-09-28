@@ -11,6 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
+#include "get_font_textures.hpp"
 
 GLuint hexapod_meshes_for_lit_color_texture_program = 0;
 Load<MeshBuffer> hexapod_meshes(LoadTagDefault, []() -> MeshBuffer const * {
@@ -77,7 +78,7 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
     };
     // TODO: copy fonts into dist
     if (FT_New_Face(ft_library,
-                    data_path("../fonts/InknutAntiqua-Regular.ttf").c_str(),
+                    data_path("../fonts/Inknut_Antiqua/InknutAntiqua-Regular.ttf").c_str(),
                     0, &ft_face)) {
         std::cerr << "Problem initializing font\n";
         abort();
@@ -88,21 +89,29 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
         abort();
     }
     
-    hb_font_t *hb_font;
-    hb_font = hb_ft_font_create_referenced(ft_face);
+    // TODO: test writing a string, for now it's just a character
+    // hb_font_t *hb_font;
+    // hb_font = hb_ft_font_create_referenced(ft_face);
+    //
+    // hb_buffer_t *hb_buffer;
+    // hb_buffer = hb_buffer_create();
+    // std::string english_text("Hello world!");
+    // hb_buffer_add_utf8(hb_buffer, english_text.c_str(), -1, 0, -1);
+    // hb_buffer_set_direction(hb_buffer, HB_DIRECTION_LTR);
+    // hb_buffer_set_script(hb_buffer, HB_SCRIPT_LATIN);
+    // hb_buffer_set_language(hb_buffer, hb_language_from_string("en", -1));
+    //
+    // hb_shape(hb_font, hb_buffer, nullptr, 0);
     
-    hb_buffer_t *hb_buffer;
-    hb_buffer = hb_buffer_create();
-    std::string english_text("Hello world!");
-//    std::string chinese_text("你好时节！");
-    hb_buffer_add_utf8(hb_buffer, english_text.c_str(), -1, 0, -1);
-    hb_buffer_set_direction(hb_buffer, HB_DIRECTION_LTR);
-    hb_buffer_set_script(hb_buffer, HB_SCRIPT_LATIN);
-    hb_buffer_set_language(hb_buffer, hb_language_from_string("en", -1));
+    // TODO: move a bunch of stuff to a different file
+    MeshBuffer font(data_path("Inknut_Antiqua.pnct"));
+    std::map<std::string, GLuint> textures = get_font_textures(data_path("Inknut_Antiqua.txtr"));
     
-    hb_shape(hb_font, hb_buffer, nullptr, 0);
+    Mesh mesh = font.lookup("A");
+    GLuint program = font.make_vao_for_program(lit_color_texture_program->program);
+    assert(textures.count("A"));
+    GLuint texture = textures["A"];
     
-    // TODO: add stuff from the generated font pnct
     scene.transforms.emplace_back();
     scene.transforms.back().position = glm::vec3(0.0, 0.0, 20.0);
     scene.drawables.emplace_back(&scene.transforms.back());
@@ -110,8 +119,11 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
     
     drawable.pipeline = lit_color_texture_program_pipeline;
     
-    drawable.pipeline.vao = hexapod_meshes_for_lit_color_texture_program;
-    assert(false && "INCOMPLETE");
+    drawable.pipeline.vao = program;
+    drawable.pipeline.textures[0].texture = texture;
+    drawable.pipeline.type = mesh.type;
+    drawable.pipeline.start = mesh.start;
+    drawable.pipeline.count = mesh.count;
 }
 
 PlayMode::~PlayMode() = default;

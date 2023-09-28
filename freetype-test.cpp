@@ -48,7 +48,8 @@ int main(int argc, char **argv) {
         explicit Vertex(glm::vec3 position, glm::vec2 tex_coord) :
                 Position(position),
                 Normal(0.0, 0.0, 1.0),
-                Color(0x00, 0x00, 0x00, 0xff),
+                // TODO: change the default back to 0xff
+                Color(0x00, 0x00, 0x00, 0xbb),
                 TexCoord(tex_coord) {}
     };
     static_assert(sizeof(Vertex) == 3 * 4 + 3 * 4 + 4 * 1 + 2 * 4, "Vertex is packed.");

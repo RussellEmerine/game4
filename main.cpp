@@ -15,6 +15,7 @@
 
 //for screenshots:
 #include "load_save_png.hpp"
+#include "gl_errors.hpp"
 
 //Includes for libSDL:
 #include <SDL.h>
@@ -94,6 +95,11 @@ int main(int argc, char **argv) {
     
     //On windows, load OpenGL entrypoints: (does nothing on other platforms)
     init_GL();
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    GL_ERRORS();
     
     //Set VSYNC + Late Swap (prevents crazy FPS):
     if (SDL_GL_SetSwapInterval(-1) != 0) {

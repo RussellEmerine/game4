@@ -6,7 +6,6 @@
  * A "MeshBuffer" holds a collection of such meshes (loaded from a file) in
  *  a single OpenGL array buffer. Individual meshes can be looked up by name
  *  using the MeshBuffer::lookup() function.
- *
  */
 
 #include "GL.hpp"
