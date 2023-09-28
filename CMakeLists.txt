@@ -56,7 +56,7 @@ add_executable(
         Sound.hpp
         data_path.cpp
         data_path.hpp
-        freetype-test.cpp
+        render-glyphs.cpp
         gl_compile_program.cpp
         gl_compile_program.hpp
         gl_errors.hpp

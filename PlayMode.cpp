@@ -78,7 +78,7 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
     };
     // TODO: copy fonts into dist
     if (FT_New_Face(ft_library,
-                    data_path("../fonts/Inknut_Antiqua/InknutAntiqua-Regular.ttf").c_str(),
+                    data_path("InknutAntiqua-Regular.ttf").c_str(),
                     0, &ft_face)) {
         std::cerr << "Problem initializing font\n";
         abort();

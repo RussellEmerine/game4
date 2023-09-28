@@ -114,7 +114,8 @@ let copies = [
     maek.COPY(`${NEST_LIBS}/opusfile/dist/README-opusfile.txt`, `dist/README-opusfile.txt`),
     maek.COPY(`${NEST_LIBS}/libogg/dist/README-libogg.txt`, `dist/README-libogg.txt`),
     maek.COPY(`${NEST_LIBS}/harfbuzz/dist/README-harfbuzz.txt`, `dist/README-harfbuzz.txt`),
-    maek.COPY(`${NEST_LIBS}/freetype/dist/README-freetype.txt`, `dist/README-freetype.txt`)
+    maek.COPY(`${NEST_LIBS}/freetype/dist/README-freetype.txt`, `dist/README-freetype.txt`),
+    maek.COPY(`fonts/Inknut_Antiqua/InknutAntiqua-Regular.ttf`, `dist/InknutAntiqua-Regular.ttf`)
 ];
 if (maek.OS === 'windows') {
     copies.push(maek.COPY(`${NEST_LIBS}/SDL2/dist/SDL2.dll`, `dist/SDL2.dll`));
@@ -166,8 +167,8 @@ const show_scene_names = [
     maek.CPP('ShowSceneMode.cpp')
 ];
 
-const freetype_test_names = [
-    maek.CPP('freetype-test.cpp'),
+const render_glyphs_names = [
+    maek.CPP('render-glyphs.cpp'),
 ];
 
 //the '[exeFile =] LINK(objFiles, exeFileBase, [, options])' links an array of objects into an executable:
@@ -178,10 +179,10 @@ const game_exe = maek.LINK([...game_names, ...common_names], 'dist/game');
 const show_meshes_exe = maek.LINK([...show_meshes_names, ...common_names], 'scenes/show-meshes');
 const show_scene_exe = maek.LINK([...show_scene_names, ...common_names], 'scenes/show-scene');
 
-const freetype_test_exe = maek.LINK([...freetype_test_names, ...common_names], 'freetype-test');
+const render_glyphs_exe = maek.LINK([...render_glyphs_names, ...common_names], 'render-glyphs');
 
 //set the default target to the game (and copy the readme files):
-maek.TARGETS = [game_exe, show_meshes_exe, show_scene_exe, freetype_test_exe, ...copies];
+maek.TARGETS = [game_exe, show_meshes_exe, show_scene_exe, render_glyphs_exe, ...copies];
 
 //Note that tasks that produce ':abstract targets' are never cached.
 // This is similar to how .PHONY targets behave in make.
