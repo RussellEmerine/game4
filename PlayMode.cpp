@@ -104,7 +104,8 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
     // TODO: rotate stuff
     name_me_line = scene.write_line("Name me!");
     name_me_line->position.z = 10.0f;
-    name_me_line->rotation = glm::angleAxis(90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    name_me_line->rotation = glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f))
+                             * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     name_me_line->parent = torus;
     reload_names();
 }
@@ -148,9 +149,14 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
                         level++;
                         reload_names();
                     } else {
+                        reload_torus_name();
                         done = true;
                         Scene::Transform *t = scene.write_line("You won!");
-                        t->scale = glm::vec3(30.0, 30.0, 30.0);
+                        t->position = glm::vec3(-10.0f, -20.0f, 10.0f);
+                        t->rotation = glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f))
+                                      * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+                        t->scale = glm::vec3(10.0, 10.0, 10.0);
+                        t->parent = center_torus;
                     }
                 } else {
                     reload_torus_name();
@@ -297,6 +303,8 @@ void PlayMode::reload_torus_name() {
     
     torus_name_line = scene.write_line(torus_name);
     torus_name_line->position.z = 5.0f;
+    torus_name_line->rotation = glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f))
+                                * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     torus_name_line->parent = torus;
 }
 
@@ -313,23 +321,35 @@ void PlayMode::reload_names() {
     // TODO: rotate stuff
     cube_name_line = scene.write_line(cube_name[level]);
     cube_name_line->position.z = 5.0f;
+    cube_name_line->rotation = glm::angleAxis(glm::pi<float>(), glm::vec3(0.0f, 0.0f, 1.0f))
+                               * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     cube_name_line->parent = cube;
     cube_name_plural_line = scene.write_line(pluralize[level](cube_name[level]));
     cube_name_plural_line->position.z = 5.0f;
+    cube_name_plural_line->rotation = glm::angleAxis(glm::pi<float>(), glm::vec3(0.0f, 0.0f, 1.0f))
+                                      * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     cube_name_plural_line->parent = center_cube;
     
     cone_name_line = scene.write_line(cone_name[level]);
     cone_name_line->position.z = 5.0f;
+    cone_name_line->rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, 1.0f))
+                               * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     cone_name_line->parent = cone;
     cone_name_plural_line = scene.write_line(pluralize[level](cone_name[level]));
     cone_name_plural_line->position.z = 5.0f;
+    cone_name_plural_line->rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, 1.0f))
+                                      * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     cone_name_plural_line->parent = center_cone;
     
     icosphere_name_line = scene.write_line(icosphere_name[level]);
     icosphere_name_line->position.z = 5.0f;
+    icosphere_name_line->rotation = glm::angleAxis(3.0f * glm::pi<float>() / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f))
+                                    * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     icosphere_name_line->parent = icosphere;
     icosphere_name_plural_line = scene.write_line(pluralize[level](icosphere_name[level]));
     icosphere_name_plural_line->position.z = 5.0f;
+    icosphere_name_plural_line->rotation = glm::angleAxis(3.0f * glm::pi<float>() / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f))
+                                           * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     icosphere_name_plural_line->parent = center_icosphere;
     
     torus_name = "";
@@ -337,5 +357,7 @@ void PlayMode::reload_names() {
     
     goal_line = scene.write_line("Goal: " + pluralize[level](goal_name[level]));
     goal_line->position.z = 5.0f;
+    goal_line->rotation = glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f))
+                          * glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
     goal_line->parent = center_torus;
 }

@@ -8,6 +8,8 @@
 
 #include <vector>
 #include <deque>
+#include <array>
+#include <algorithm>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
