@@ -2,7 +2,7 @@
 
 #include "Scene.hpp"
 #include "Sound.hpp"
-#include "WriteGlyphScene.hpp"
+#include "WriteTextScene.hpp"
 
 #include <glm/glm.hpp>
 
@@ -36,7 +36,7 @@ struct PlayMode : Mode {
     } left, right, down, up;
     
     //local copy of the game scene (so code can change it during gameplay):
-    WriteGlyphScene scene;
+    WriteTextScene scene;
     
     //hexapod leg to wobble:
     Scene::Transform *hip = nullptr;
@@ -47,10 +47,7 @@ struct PlayMode : Mode {
     glm::quat lower_leg_base_rotation;
     float wobble = 0.0f;
     
-    glm::vec3 get_leg_tip_position();
-    
-    //music coming from the tip of the leg (as a demonstration):
-    std::shared_ptr<Sound::PlayingSample> leg_tip_loop;
+    glm::vec3 get_leg_tip_position() const;
     
     //camera:
     Scene::Camera *camera = nullptr;

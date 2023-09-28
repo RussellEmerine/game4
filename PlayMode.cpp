@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include "get_font_textures.hpp"
-#include "WriteGlyphScene.hpp"
+#include "WriteTextScene.hpp"
 
 GLuint hexapod_meshes_for_lit_color_texture_program = 0;
 Load<MeshBuffer> hexapod_meshes(LoadTagDefault, []() -> MeshBuffer const * {
@@ -67,16 +67,13 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
                 "Expecting scene to have exactly one camera, but it has " + std::to_string(scene.cameras.size()));
     camera = &scene.cameras.front();
     
-    //start music loop playing:
-    // (note: position will be over-ridden in update())
-    leg_tip_loop = Sound::loop_3D(*dusty_floor_sample, 1.0f, get_leg_tip_position(), 10.0f);
+    // TODO: add music
     
-    scene.transforms.emplace_back();
-    Scene::Transform &letter = scene.transforms.back();
+    Scene::Transform *t = scene.write_line("Hellö, worłd! ff ffl ffi");
+    Scene::Transform &letter = *t;
     letter.name = "AAAAAAAA";
     letter.position.y = -15.0f;
     letter.parent = lower_leg;
-    scene.write_glyph_at(&letter, "A");
 }
 
 PlayMode::~PlayMode() = default;
@@ -159,15 +156,12 @@ void PlayMode::update(float elapsed) {
             glm::vec3(0.0f, 0.0f, 1.0f)
     );
     
-    //move sound to follow leg tip position:
-    leg_tip_loop->set_position(get_leg_tip_position(), 1.0f / 60.0f);
-    
     //move camera:
     {
         
         //combine inputs into a move:
         constexpr float PlayerSpeed = 30.0f;
-        glm::vec2 move = glm::vec2(0.0f);
+        auto move = glm::vec2(0.0f, 0.0f);
         if (left.pressed && !right.pressed) move.x = -1.0f;
         if (!left.pressed && right.pressed) move.x = 1.0f;
         if (down.pressed && !up.pressed) move.y = -1.0f;
@@ -243,7 +237,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
     GL_ERRORS();
 }
 
-glm::vec3 PlayMode::get_leg_tip_position() {
+glm::vec3 PlayMode::get_leg_tip_position() const {
     //the vertex position here was read from the model in blender:
     return lower_leg->make_local_to_world() * glm::vec4(-1.26137f, -11.861f, 0.0f, 1.0f);
 }

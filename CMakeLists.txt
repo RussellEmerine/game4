@@ -77,4 +77,6 @@ add_executable(
         WriteGlyphScene.hpp
         util.cpp
         util.hpp
+        WriteTextScene.cpp
+        WriteTextScene.hpp
 )

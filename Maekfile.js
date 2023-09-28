@@ -138,7 +138,8 @@ const game_names = [
     maek.CPP('load_wav.cpp'),
     maek.CPP('load_opus.cpp'),
     maek.CPP('get_font_textures.cpp'),
-    maek.CPP('WriteGlyphScene.cpp')
+    maek.CPP('WriteGlyphScene.cpp'),
+    maek.CPP('WriteTextScene.cpp')
 ];
 
 const common_names = [

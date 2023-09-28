@@ -39,6 +39,8 @@ void WriteGlyphScene::write_glyph_at(Transform *transform, std::string const &gl
     Mesh mesh = font_meshes.lookup(glyph_name);
     assert(textures.count(glyph_name));
     GLuint texture = textures[glyph_name];
+
+//    std::cerr << "Writing glyph " << glyph_name << " at " << transform->position.x << ", " << transform->position.y << "\n";
     
     drawables.emplace_back(transform);
     Drawable &drawable = drawables.back();
@@ -57,17 +59,3 @@ void WriteGlyphScene::write_glyph_at(Transform *transform, std::string const &gl
 void WriteGlyphScene::erase_glyph_at(Scene::Transform *transform) {
     drawables.remove_if([transform](Drawable &drawable) { return drawable.transform == transform; });
 }
-
-// TODO: test writing a string, for now it's just a character
-// hb_font_t *hb_font;
-// hb_font = hb_ft_font_create_referenced(face);
-//
-// hb_buffer_t *hb_buffer;
-// hb_buffer = hb_buffer_create();
-// std::string english_text("Hello world!");
-// hb_buffer_add_utf8(hb_buffer, english_text.c_str(), -1, 0, -1);
-// hb_buffer_set_direction(hb_buffer, HB_DIRECTION_LTR);
-// hb_buffer_set_script(hb_buffer, HB_SCRIPT_LATIN);
-// hb_buffer_set_language(hb_buffer, hb_language_from_string("en", -1));
-//
-// hb_shape(hb_font, hb_buffer, nullptr, 0);
