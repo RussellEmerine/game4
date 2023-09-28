@@ -158,7 +158,6 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
                 "Expecting scene to have exactly one camera, but it has " + std::to_string(scene.cameras.size()));
     camera = &scene.cameras.front();
     
-    // TODO: rotate stuff
     name_me_line = scene.write_line("Name me!");
     name_me_line->position.z = 10.0f;
     name_me_line->rotation = glm::angleAxis(glm::pi<float>() / 2.0f, glm::vec3(0.0f, 0.0f, 1.0f))
@@ -374,8 +373,6 @@ void PlayMode::reload_names() {
     scene.erase_line(icosphere_name_plural_line);
     scene.erase_line(goal_line);
     
-    
-    // TODO: rotate stuff
     cube_name_line = scene.write_line(cube_name[level]);
     cube_name_line->position.z = 5.0f;
     cube_name_line->rotation = glm::angleAxis(glm::pi<float>(), glm::vec3(0.0f, 0.0f, 1.0f))

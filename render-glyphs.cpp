@@ -24,7 +24,6 @@ int main(int argc, char **argv) {
     if (FT_Init_FreeType(&ft_library)) {
         assert(false && "Problem initializing FreeType");
     }
-    // TODO: copy fonts into dist
     if (FT_New_Face(ft_library,
                     data_path("fonts/Inknut_Antiqua/InknutAntiqua-Regular.ttf").c_str(),
                     0, &face)) {
