@@ -38,17 +38,59 @@ struct PlayMode : Mode {
     //local copy of the game scene (so code can change it during gameplay):
     WriteTextScene scene;
     
-    //hexapod leg to wobble:
-    Scene::Transform *hip = nullptr;
-    Scene::Transform *upper_leg = nullptr;
-    Scene::Transform *lower_leg = nullptr;
-    glm::quat hip_base_rotation;
-    glm::quat upper_leg_base_rotation;
-    glm::quat lower_leg_base_rotation;
-    float wobble = 0.0f;
-    
-    glm::vec3 get_leg_tip_position() const;
-    
     //camera:
     Scene::Camera *camera = nullptr;
+    
+    Scene::Transform
+            *cube,
+            *center_cube,
+            *cone,
+            *center_cone,
+            *icosphere,
+            *center_icosphere,
+            *torus,
+            *center_torus,
+            *cube_name_line,
+            *cube_name_plural_line,
+            *cone_name_line,
+            *cone_name_plural_line,
+            *icosphere_name_line,
+            *icosphere_name_plural_line,
+            *torus_name_line,
+            *name_me_line,
+            *goal_line;
+    
+    size_t level = 0;
+    bool done = false;
+    std::string torus_name;
+    
+    static constexpr size_t LEVEL_COUNT = 4;
+    const std::array<std::string, LEVEL_COUNT> cube_name = {
+            "ėnevað",
+            "bana",
+            "oop",
+            "hello"
+    };
+    const std::array<std::string, LEVEL_COUNT> cone_name = {
+            "raaaaa",
+            "bana",
+            "oop",
+            "hello"
+    };
+    const std::array<std::string, LEVEL_COUNT> icosphere_name = {
+            "jammin",
+            "bana",
+            "oop",
+            "hello"
+    };
+    const std::array<std::string, LEVEL_COUNT> goal_name = {
+            "aaaaaaha",
+            "bana",
+            "oop",
+            "hello"
+    };
+    
+    void reload_names();
+    
+    void reload_torus_name();
 };

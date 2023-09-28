@@ -63,4 +63,7 @@ void WriteTextScene::erase_line(Scene::Transform *transform) {
             }
         }
     }
+    lines.remove_if([transform](TextLine &line) {
+        return &line.base == transform;
+    });
 }
