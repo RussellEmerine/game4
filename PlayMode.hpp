@@ -70,26 +70,26 @@ struct PlayMode : Mode {
     const std::array<std::string, LEVEL_COUNT> cube_name = {
             "ėnevað",
             "bana",
-            "oop",
-            "hello"
+            "emilan",
+            "konop"
     };
     const std::array<std::string, LEVEL_COUNT> cone_name = {
-            "raaaaa",
-            "bana",
-            "oop",
-            "hello"
+            "raðan",
+            "ndirino",
+            "kiphilon",
+            "hungildaf"
     };
     const std::array<std::string, LEVEL_COUNT> icosphere_name = {
-            "jammin",
-            "bana",
-            "oop",
-            "hello"
+            "jamėk",
+            "anudu",
+            "tantu",
+            "alfinostak"
     };
     const std::array<std::string, LEVEL_COUNT> goal_name = {
-            "aaaaaaha",
-            "bana",
-            "oop",
-            "hello"
+            "laano",
+            "sisini",
+            "bulanaph",
+            "stroumet"
     };
     
     void reload_names();

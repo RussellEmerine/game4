@@ -39,11 +39,70 @@ std::string reduplicate(const std::string &s) {
     }
 }
 
+std::string infix(const std::string &s) {
+    size_t v = s.size();
+    for (size_t i = 0; i < s.size(); i++) {
+        if (is_ascii_vowel(s[i])) {
+            v = i;
+            break;
+        }
+    }
+    if (v == s.size()) {
+        return "";
+    } else {
+        return s.substr(0, v) + "al" + s.substr(v);
+    }
+}
+
+char voice(char c) {
+    switch (c) {
+        case 'f':
+            return 'v';
+        case 'k':
+            return 'g';
+        case 'p':
+            return 'b';
+        case 's':
+            return 'z';
+        case 't':
+            return 'd';
+        default:
+            return c;
+    }
+    // makes less clever compilers happy
+    return c;
+}
+
+std::string umlaut_and_voice(const std::string &s) {
+    std::string res;
+    for (char c: s) {
+        switch (c) {
+            case 'a':
+                res += "æ";
+                break;
+            case 'o':
+                res += "œ";
+                break;
+            case 'u':
+                res += "ø";
+                break;
+            default:
+                res += c;
+        }
+    }
+    if (s.empty()) {
+        return "";
+    }
+    // this doesn't fail for non-ascii since it should just replace the wonky character code with itself
+    res.back() = voice(res.back());
+    return res + "ir";
+}
+
 std::array<std::function<std::string(const std::string &)>, PlayMode::LEVEL_COUNT> pluralize = {
         suffix,
         reduplicate,
-        reduplicate,
-        reduplicate,
+        infix,
+        umlaut_and_voice,
 };
 
 GLuint hexapod_meshes_for_lit_color_texture_program = 0;
