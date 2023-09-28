@@ -2,6 +2,7 @@
 
 #include "Scene.hpp"
 #include "Sound.hpp"
+#include "WriteGlyphScene.hpp"
 
 #include <glm/glm.hpp>
 
@@ -35,7 +36,7 @@ struct PlayMode : Mode {
     } left, right, down, up;
     
     //local copy of the game scene (so code can change it during gameplay):
-    Scene scene;
+    WriteGlyphScene scene;
     
     //hexapod leg to wobble:
     Scene::Transform *hip = nullptr;

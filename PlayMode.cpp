@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include "get_font_textures.hpp"
+#include "WriteGlyphScene.hpp"
 
 GLuint hexapod_meshes_for_lit_color_texture_program = 0;
 Load<MeshBuffer> hexapod_meshes(LoadTagDefault, []() -> MeshBuffer const * {
@@ -20,22 +21,25 @@ Load<MeshBuffer> hexapod_meshes(LoadTagDefault, []() -> MeshBuffer const * {
     return ret;
 });
 
-Load<Scene> hexapod_scene(LoadTagDefault, []() -> Scene const * {
-    return new Scene(data_path("hexapod.scene"),
-                     [&](Scene &scene, Scene::Transform *transform, std::string const &mesh_name) {
-                         Mesh const &mesh = hexapod_meshes->lookup(mesh_name);
-                         
-                         scene.drawables.emplace_back(transform);
-                         Scene::Drawable &drawable = scene.drawables.back();
-                         
-                         drawable.pipeline = lit_color_texture_program_pipeline;
-                         
-                         drawable.pipeline.vao = hexapod_meshes_for_lit_color_texture_program;
-                         drawable.pipeline.type = mesh.type;
-                         drawable.pipeline.start = mesh.start;
-                         drawable.pipeline.count = mesh.count;
-                         
-                     });
+Load<WriteGlyphScene> hexapod_scene(LoadTagDefault, []() -> WriteGlyphScene const * {
+    return new WriteGlyphScene(
+            data_path("hexapod.scene"),
+            [&](Scene &scene, Scene::Transform *transform, std::string const &mesh_name) {
+                Mesh const &mesh = hexapod_meshes->lookup(mesh_name);
+                
+                scene.drawables.emplace_back(transform);
+                Scene::Drawable &drawable = scene.drawables.back();
+                
+                drawable.pipeline = lit_color_texture_program_pipeline;
+                
+                drawable.pipeline.vao = hexapod_meshes_for_lit_color_texture_program;
+                drawable.pipeline.type = mesh.type;
+                drawable.pipeline.start = mesh.start;
+                drawable.pipeline.count = mesh.count;
+            },
+            data_path("InknutAntiqua-Regular.ttf"),
+            data_path("InknutAntiqua.pnct"),
+            data_path("InknutAntiqua.txtr"));
 });
 
 Load<Sound::Sample> dusty_floor_sample(LoadTagDefault, []() -> Sound::Sample const * {
@@ -67,69 +71,17 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
     // (note: position will be over-ridden in update())
     leg_tip_loop = Sound::loop_3D(*dusty_floor_sample, 1.0f, get_leg_tip_position(), 10.0f);
     
-    // We only need to create the data once for now, so it's fine to just have them here in the constructor
-    // TODO: offload these into dedicated drawing structures
-    FT_Library ft_library;
-    FT_Face ft_face;
-    
-    if (FT_Init_FreeType(&ft_library)) {
-        std::cerr << "Problem initializing FreeType\n";
-        abort();
-    };
-    // TODO: copy fonts into dist
-    if (FT_New_Face(ft_library,
-                    data_path("InknutAntiqua-Regular.ttf").c_str(),
-                    0, &ft_face)) {
-        std::cerr << "Problem initializing font\n";
-        abort();
-    }
-    // TODO: fix magic numbers
-    if (FT_Set_Char_Size(ft_face, 36 * 64, 0, 0, 0)) {
-        std::cerr << "Problem setting character size\n";
-        abort();
-    }
-    
-    // TODO: test writing a string, for now it's just a character
-    // hb_font_t *hb_font;
-    // hb_font = hb_ft_font_create_referenced(ft_face);
-    //
-    // hb_buffer_t *hb_buffer;
-    // hb_buffer = hb_buffer_create();
-    // std::string english_text("Hello world!");
-    // hb_buffer_add_utf8(hb_buffer, english_text.c_str(), -1, 0, -1);
-    // hb_buffer_set_direction(hb_buffer, HB_DIRECTION_LTR);
-    // hb_buffer_set_script(hb_buffer, HB_SCRIPT_LATIN);
-    // hb_buffer_set_language(hb_buffer, hb_language_from_string("en", -1));
-    //
-    // hb_shape(hb_font, hb_buffer, nullptr, 0);
-    
-    // TODO: move a bunch of stuff to a different file
-    MeshBuffer font(data_path("Inknut_Antiqua.pnct"));
-    std::map<std::string, GLuint> textures = get_font_textures(data_path("Inknut_Antiqua.txtr"));
-    
-    Mesh mesh = font.lookup("A");
-    GLuint program = font.make_vao_for_program(lit_color_texture_program->program);
-    assert(textures.count("A"));
-    GLuint texture = textures["A"];
-    
     scene.transforms.emplace_back();
-    scene.transforms.back().position = glm::vec3(0.0, 0.0, 20.0);
-    scene.drawables.emplace_back(&scene.transforms.back());
-    Scene::Drawable &drawable = scene.drawables.back();
-    
-    drawable.pipeline = lit_color_texture_program_pipeline;
-    
-    drawable.pipeline.vao = program;
-    drawable.pipeline.textures[0].texture = texture;
-    drawable.pipeline.type = mesh.type;
-    drawable.pipeline.start = mesh.start;
-    drawable.pipeline.count = mesh.count;
+    Scene::Transform &letter = scene.transforms.back();
+    letter.name = "AAAAAAAA";
+    letter.position.y = -15.0f;
+    letter.parent = lower_leg;
+    scene.write_glyph_at(&letter, "A");
 }
 
 PlayMode::~PlayMode() = default;
 
 bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size) {
-    
     if (evt.type == SDL_KEYDOWN) {
         if (evt.key.keysym.sym == SDLK_ESCAPE) {
             SDL_SetRelativeMouseMode(SDL_FALSE);

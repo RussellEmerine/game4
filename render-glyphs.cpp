@@ -15,10 +15,7 @@
 
 #include "data_path.hpp"
 #include "read_write_chunk.hpp"
-
-// TODO: put constants in a common file
-constexpr size_t PIXEL_COUNT = 200;
-constexpr float PIXEL_SCALE = 0.01f;
+#include "util.hpp"
 
 int main(int argc, char **argv) {
     FT_Library ft_library;
@@ -193,14 +190,14 @@ int main(int argc, char **argv) {
     }
     
     { // write rectangles to .pnct file
-        std::ofstream out(data_path("dist/Inknut_Antiqua.pnct"), std::ios::binary);
+        std::ofstream out(data_path("dist/InknutAntiqua.pnct"), std::ios::binary);
         write_chunk("pnct", vertices, &out);
         write_chunk("str0", strings, &out);
         write_chunk("idx0", vertex_indices, &out);
     }
     
     { // write textures to texture file
-        std::ofstream out(data_path("dist/Inknut_Antiqua.txtr"), std::ios::binary);
+        std::ofstream out(data_path("dist/InknutAntiqua.txtr"), std::ios::binary);
         write_chunk("txtr", texture_colors, &out);
         write_chunk("str0", strings, &out);
         write_chunk("idx1", texture_indices, &out);

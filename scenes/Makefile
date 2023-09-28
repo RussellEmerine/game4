@@ -9,6 +9,7 @@ else ifeq ($(UNAME_S),Linux)
 else
 	BLENDER = blender
 endif
+BLENDER = /Applications/Blender.app/Contents/MacOS/Blender -y
 
 EXPORT_MESHES=export-meshes.py
 EXPORT_SCENE=export-scene.py

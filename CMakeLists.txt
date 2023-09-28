@@ -73,4 +73,8 @@ add_executable(
         main.cpp
         get_font_textures.cpp
         get_font_textures.hpp
+        WriteGlyphScene.cpp
+        WriteGlyphScene.hpp
+        util.cpp
+        util.hpp
 )
